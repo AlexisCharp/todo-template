@@ -1,27 +1,20 @@
-import { Button } from '../button';
-import './TodoElement.css';
+import { Button } from '../button/Button';
 import { ReactComponent as DeleteIcon } from '../../assets/delete.svg';
+import './TodoElement.css';
 
 export const TodoElement = ({ id, todo, onChange, onDelete }) => {
-  const todoId = `todo-${id}`;
-
   return (
     <div className="todo-element">
-      <label className="todo-element__form" htmlFor={todoId}>
+      <label className="todo-element__form" htmlFor={id}>
         <input
-          id={todoId}
-          checked={todo.isChecked}
+          id={id}
           type="checkbox"
+          checked={todo.isChecked}
           onChange={() => onChange(todo)}
         />
         {todo.name}
       </label>
-      <Button
-        aria-label="Delete task"
-        variant="danger"
-        noPadding
-        onClick={() => onDelete(todo)}
-      >
+      <Button variant="danger" noPadding onClick={() => onDelete(todo)}>
         <DeleteIcon />
       </Button>
     </div>

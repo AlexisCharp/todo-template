@@ -1,30 +1,25 @@
-import { useEffect, useState } from 'react';
-import {
-  loadFromLocalStorage,
-  saveToLocalStorage,
-} from '../../utils/storage-util';
-import { TodoAction } from '../todo-action';
-import { TodoElement } from '../todo-element';
+import { useState } from 'react';
+import { TodoAction } from '../todo-action/TodoAction';
+import { TodoElement } from '../todo-element/TodoElement';
 import './TodoList.css';
 
-export const TodoList = ({ storageKey }) => {
-  const data = loadFromLocalStorage(storageKey);
-  const [todos, setTodos] = useState([...data]);
+export const TodoList = () => {
+  const data = [
+    {
+      name: 'Acheter une corde',
+      isChecked: true,
+    },
+    {
+      name: 'Acheter un tabouret',
+      isChecked: false,
+    },
+    {
+      name: 'En finir',
+      isChecked: false,
+    },
+  ];
 
-  useEffect(() => {
-    saveToLocalStorage(storageKey, todos);
-  }, [todos, storageKey]);
-
-  const onAdd = (todoName) => {
-    const newTodo = { name: todoName, isChecked: false };
-    setTodos([newTodo, ...todos]);
-    setTimeout(() => console.log({ todos }), 1000);
-  };
-
-  const onChange = (todo) => {
-    todo.isChecked = !todo.isChecked;
-    setTodos([...todos]);
-  };
+  const [todos, setTodos] = useState(data);
 
   const onDelete = (todo) => {
     const index = todos.indexOf(todo);
@@ -32,12 +27,17 @@ export const TodoList = ({ storageKey }) => {
     setTodos([...todos]);
   };
 
+  const onChange = (todo) => {
+    todo.isChecked = !todo.isChecked;
+    setTodos([...todos]);
+  };
+
   return (
     <div className="todo-list">
       <h2>Todo #1</h2>
-      <TodoAction onSubmit={onAdd} />
-      {todos &&
-        todos.map((todo, index) => (
+      <TodoAction />
+      {todos.map((todo, index) => {
+        return (
           <TodoElement
             key={index}
             id={index}
@@ -45,7 +45,8 @@ export const TodoList = ({ storageKey }) => {
             onChange={onChange}
             onDelete={onDelete}
           />
-        ))}
+        );
+      })}
     </div>
   );
 };
